@@ -10,13 +10,14 @@ import org.apache.ftpserver.ftplet.Ftplet;
 import org.apache.ftpserver.listener.ListenerFactory;
 import org.apache.ftpserver.usermanager.ClearTextPasswordEncryptor;
 import org.apache.ftpserver.usermanager.PropertiesUserManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,9 @@ import java.util.Map;
 
 @Configuration
 public class FtpConfig extends CachingConfigurerSupport {
+
+    public static final Logger log = LoggerFactory.getLogger(FtpConfig.class);
+
     @Autowired
     private FtpProperties ftpProperties;
 
@@ -48,8 +52,7 @@ public class FtpConfig extends CachingConfigurerSupport {
         PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         try {
             ClassPathResource classPathResource = new ClassPathResource("users.properties");
-            URL url = classPathResource.getURL();
-            userManagerFactory.setUrl(url);
+            userManagerFactory.setUrl(classPathResource.getURL());
         } catch (Exception e) {
             throw new RuntimeException("配置文件users.properties不存在");
         }
@@ -62,6 +65,7 @@ public class FtpConfig extends CachingConfigurerSupport {
         serverFactory.setFtplets(ftpLets);
 
         FtpServer server = serverFactory.createServer();
+        log.info("ftp-server initialized with port(s): {}",ftpProperties.getPort());
         return server;
     }
 }

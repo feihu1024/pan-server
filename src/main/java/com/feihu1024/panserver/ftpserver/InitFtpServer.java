@@ -1,5 +1,6 @@
 package com.feihu1024.panserver.ftpserver;
 
+import com.feihu1024.panserver.common.FtpProperties;
 import org.apache.ftpserver.FtpServer;
 import org.apache.ftpserver.ftplet.FtpException;
 import org.slf4j.Logger;
@@ -19,14 +20,17 @@ public class InitFtpServer implements CommandLineRunner {
     @Autowired
     private FtpServer server;
 
+    @Autowired
+    private FtpProperties ftpProperties;
+
     @Override
     public void run(String... args) {
         try {
             server.start();
-            log.info(">>>>>>>ftp start success ");
+            log.info("ftp-server start with port(s) "+ftpProperties.getPort()+" success ");
         } catch (FtpException e) {
             e.printStackTrace();
-            log.error(">>>>>>>ftp start error {}", e);
+            log.error("ftp-server start error {}", e);
         }
     }
 }
