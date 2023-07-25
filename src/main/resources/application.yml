@@ -1,0 +1,21 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: "pan-server"
+
+# ftpserver配置
+ftp:
+  port: 3100
+  passivePorts: 3200-3300
+  # passiveExternalAddress: 127.0.0.1
+
+# Swagger-ui配置
+swagger:
+  enable: true
+  basePackage: "com.feihu1024.panserver.controller"
+  application-name: ${spring.application.name}
+  application-version: "0.0.1"
+  title: "pan-server接口文档"
+  application-description: "个人网盘系统接口文档"
+  contact: "feihu1024"
