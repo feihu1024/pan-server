@@ -9,5 +9,4 @@ class PanServerApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
