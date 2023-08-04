@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Api(tags = "地面气象站查询服务")
+@Api(tags = "地面气象站服务")
 
 @Controller
 @CrossOrigin
@@ -27,7 +27,7 @@ public class SurfStationController {
     @ApiOperation(value = "查询气象站", notes = "按名称查询气象站")
     @ResponseBody
     @GetMapping("/queryStationByName")
-    public ResponseResult<SurfStation[]> getFiles(@ApiParam(value = "气象站名称", name = "name", type = "String") String name) {
+    public ResponseResult<SurfStation[]> getFiles(@ApiParam(value = "气象站名称", name = "name", type = "String" ,required = true) String name) {
 
         SurfStation[] stations = surfStationService.queryStationByName(name);
         return new ResponseResult(stations);

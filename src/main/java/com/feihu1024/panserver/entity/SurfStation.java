@@ -1,6 +1,5 @@
 package com.feihu1024.panserver.entity;
 
-import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -18,8 +17,10 @@ import java.io.Serializable;
 @Accessors(chain = true)// 使用链式方法
 @Data // 重写getter、setter、toString等方法
 @TableName("china_sufr_station")
-@ApiModel(value = "地面气象站信息", description = "地面气象站信息")
+@ApiModel(value = "地面气象站信息")
+
 public class SurfStation implements Serializable {
+
     @ApiModelProperty(value = "主键id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
