@@ -34,6 +34,9 @@ public class FtpConfig extends CachingConfigurerSupport {
     private FtpProperties ftpProperties;
 
     @Autowired
+    FtpProperties.TableFields tableFields;
+
+    @Autowired
     private DataSource dataSource;
 
     @Bean
@@ -44,7 +47,7 @@ public class FtpConfig extends CachingConfigurerSupport {
         factory.setPort(ftpProperties.getPort());
 
         DataConnectionConfigurationFactory dataConnectionConfigurationFactory = new DataConnectionConfigurationFactory();
-        dataConnectionConfigurationFactory.setIdleTime(60);
+        // dataConnectionConfigurationFactory.setIdleTime(60);
         // dataConnectionConfigurationFactory.setActiveLocalPort(ftpProperties.getPort());
         dataConnectionConfigurationFactory.setPassiveIpCheck(true);
         dataConnectionConfigurationFactory.setPassivePorts(ftpProperties.getPassivePorts());
@@ -56,14 +59,13 @@ public class FtpConfig extends CachingConfigurerSupport {
         DbUserManagerFactory userManagerFactory = new DbUserManagerFactory();
         userManagerFactory.setDataSource(dataSource);
         userManagerFactory.setAdminName("admin");
-        userManagerFactory.setSqlUserAdmin("SELECT user_name FROM pan.ftp_user WHERE user_name='{userid}' AND user_name='admin'");
-        userManagerFactory.setSqlUserInsert("INSERT INTO pan.ftp_user (user_name, password, home_directory, enable_flag, write_permission, idle_time, upload_rate, download_rate, max_login_number, max_login_perip) " +
-            "VALUES ('{userid}', '{userpassword}', '{homedirectory}', {enableflag}, {writepermission}, {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})");
-        userManagerFactory.setSqlUserDelete("DELETE FROM pan.ftp_user WHERE user_name = '{userid}'");
-        userManagerFactory.setSqlUserUpdate("UPDATE pan.ftp_user SET password='{userpassword}', home_directory='{homedirectory}', enable_flag={enableflag}, write_permission={writepermission}, idle_time={idletime}, upload_rate={uploadrate}, download_rate={downloadrate} ,max_login_number={maxloginnumber}, max_login_perip={maxloginperip} WHERE user_name='{userid}'");
-        userManagerFactory.setSqlUserSelect("SELECT user_name as userid, password as userpassword, home_directory as homedirectory, enable_flag as enableflag, write_permission as writepermission, idle_time as idletime, upload_rate as uploadrate, download_rate as downloadrate, max_login_number as maxloginnumber, max_login_perip as maxloginperip FROM pan.ftp_user WHERE user_name = '{userid}'");
-        userManagerFactory.setSqlUserSelectAll("SELECT user_name as  userid FROM pan.ftp_user ORDER BY user_name");
-        userManagerFactory.setSqlUserAuthenticate("SELECT user_name as userid, password as userpassword FROM pan.ftp_user WHERE user_name='{userid}'");
+        userManagerFactory.setSqlUserAdmin(getSqlString("admin"));
+        userManagerFactory.setSqlUserInsert(getSqlString("insert"));
+        userManagerFactory.setSqlUserDelete(getSqlString("delete"));
+        userManagerFactory.setSqlUserUpdate(getSqlString("update"));
+        userManagerFactory.setSqlUserSelect(getSqlString("select"));
+        userManagerFactory.setSqlUserSelectAll(getSqlString("selectAll"));
+        userManagerFactory.setSqlUserAuthenticate(getSqlString("authenticate"));
 
 
         userManagerFactory.setPasswordEncryptor(new ClearTextPasswordEncryptor());
@@ -76,5 +78,60 @@ public class FtpConfig extends CachingConfigurerSupport {
         FtpServer server = serverFactory.createServer();
         log.info("ftp-server initialized with port(s): {}", ftpProperties.getPort());
         return server;
+    }
+
+    String getSqlString(String type) {
+        String tableName = ftpProperties.getTableName();
+        System.out.println(tableFields);
+        switch (type) {
+            case "admin":
+                return "SELECT " + tableFields.getUserid() + " FROM " + tableName + " WHERE " + tableFields.getUserid() + "='{userid}' AND " + tableFields.getUserid() + "='admin'";
+            case "insert":
+                return "INSERT INTO " + tableName + " (" +
+                        tableFields.getUserid() + ", " +
+                        tableFields.getUserpassword() + ", " +
+                        tableFields.getHomedirectory() + ", " +
+                        tableFields.getEnableflag() + ", " +
+                        tableFields.getWritepermission() + ", " +
+                        tableFields.getIdletime() + ", " +
+                        tableFields.getUploadrate() + ", " +
+                        tableFields.getDownloadrate() + ", " +
+                        tableFields.getMaxloginnumber() + ", " +
+                        tableFields.getMaxloginperip() + " ) " +
+                        "VALUES ('{userid}', '{userpassword}', '{homedirectory}', {enableflag}, {writepermission}, {idletime}, {uploadrate}, {downloadrate}, {maxloginnumber}, {maxloginperip})";
+            case "delete":
+                return "DELETE FROM " + tableName + " WHERE " + tableFields.getUserid() + " = '{userid}'";
+            case "update":
+                return "UPDATE " + tableName + " SET " +
+                        tableFields.getUserpassword() + "='{userpassword}', " +
+                        tableFields.getHomedirectory() + "='{homedirectory}', " +
+                        tableFields.getEnableflag() + "={enableflag}, " +
+                        tableFields.getWritepermission() + "={writepermission}, " +
+                        tableFields.getIdletime() + "={idletime}, " +
+                        tableFields.getUploadrate() + "={uploadrate}, " +
+                        tableFields.getDownloadrate() + "={downloadrate} ," +
+                        tableFields.getMaxloginnumber() + "={maxloginnumber}, " +
+                        tableFields.getMaxloginperip() + "={maxloginperip} WHERE " +
+                        tableFields.getUserid() + "='{userid}'";
+            case "select":
+                return "SELECT " +
+                        tableFields.getUserid() + " as userid, " +
+                        tableFields.getUserpassword() + " as userpassword, " +
+                        tableFields.getHomedirectory() + " as homedirectory, " +
+                        tableFields.getEnableflag() + " as enableflag, " +
+                        tableFields.getWritepermission() + " as writepermission, " +
+                        tableFields.getIdletime() + " as idletime, " +
+                        tableFields.getUploadrate() + " as uploadrate, " +
+                        tableFields.getDownloadrate() + " as downloadrate, " +
+                        tableFields.getMaxloginnumber() + " as maxloginnumber, " +
+                        tableFields.getMaxloginperip() + " as maxloginperip FROM " +
+                        tableName + " WHERE " +
+                        tableFields.getUserid() + " = '{userid}'";
+            case "selectAll":
+                return "SELECT " + tableFields.getUserid() + " as userid FROM " + tableName + " ORDER BY " + tableFields.getUserid() + "";
+            case "authenticate":
+                return "SELECT " + tableFields.getUserid() + " as userid, " + tableFields.getUserpassword() + " as userpassword FROM " + tableName + " WHERE " + tableFields.getUserid() + "='{userid}'";
+        }
+        return "";
     }
 }

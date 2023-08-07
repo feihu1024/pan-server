@@ -44,7 +44,6 @@ public class FtpUserController {
     @ResponseBody
     @PostMapping("/updateUser")
     public ResponseResult<Boolean> updateUser(FtpUser user) {
-
         Boolean success = ftpUserService.save(user);
         return new ResponseResult(success);
     }

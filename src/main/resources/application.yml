@@ -37,6 +37,18 @@ ftp:
   port: 3100
   passivePorts: 3200-3300
   # passiveExternalAddress: 127.0.0.1
+  table-fields:
+    userid: "user_name"
+    userpassword: "password"
+    homedirectory: "home_directory"
+    enableflag: "enable_flag"
+    writepermission: "write_permission"
+    idletime: "idle_time"
+    uploadrate: "upload_rate"
+    downloadrate: "download_rate"
+    maxloginnumber: "max_login_number"
+    maxloginperip: "max_login_perip"
+  table-name: "pan.ftp_user"
 
 # Swagger-ui配置
 swagger:
