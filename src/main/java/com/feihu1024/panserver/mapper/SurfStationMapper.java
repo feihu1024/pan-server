@@ -1,4 +1,4 @@
-package com.feihu1024.panserver.dao;
+package com.feihu1024.panserver.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.feihu1024.panserver.entity.SurfStation;

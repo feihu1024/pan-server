@@ -104,10 +104,10 @@
         </dependency>
 
         <!-- SpringSecurity权限管理-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
 
         <!-- yam配置文件自定义时的提示辅助工具-->
         <dependency>

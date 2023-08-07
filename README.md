@@ -6,6 +6,8 @@
 
 ## 问题记录
 - 集成SpringSecurity实现用户权限管理
-- ftpconfig字段如何通过配置进行对应，根目录不生效的问题
+    - swagger中显示自定义登录接口
+    - 改为header token
+    - 未登录状态如何修改为401
 - 如何解决swagger参数动态化配置的问题
 - 编写和完善README.md文档

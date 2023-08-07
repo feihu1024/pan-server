@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.feihu1024.panserver.dao")
+@MapperScan("com.feihu1024.panserver.mapper")
 public class PanServerApplication {
 
     public static void main(String[] args) {

@@ -4,7 +4,7 @@ import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.feihu1024.panserver.entity.SurfStation;
-import com.feihu1024.panserver.dao.SurfStationMapper;
+import com.feihu1024.panserver.mapper.SurfStationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
