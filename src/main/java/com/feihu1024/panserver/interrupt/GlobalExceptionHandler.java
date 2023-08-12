@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+/**
+ * 全局异常拦截器
+ */
+
 @ControllerAdvice()
 public class GlobalExceptionHandler implements ResponseBodyAdvice {
 

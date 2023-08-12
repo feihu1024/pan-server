@@ -6,6 +6,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.springframework.http.HttpStatus;
 
+/**
+ * 自定义异常处理对象
+ */
+
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @Accessors(chain = true)

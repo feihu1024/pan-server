@@ -1,6 +1,7 @@
 package com.feihu1024.panserver.config;
 
 
+import com.feihu1024.panserver.common.CustomMD5PasswordEncoder;
 import com.feihu1024.panserver.common.FtpProperties;
 import com.feihu1024.panserver.ftpserver.CustomFtpPlet;
 import org.apache.ftpserver.DataConnectionConfigurationFactory;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -38,6 +40,9 @@ public class FtpConfig extends CachingConfigurerSupport {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    CustomMD5PasswordEncoder customMD5PasswordEncoder;
 
     @Bean
     public FtpServer createFtpServer() {
@@ -68,7 +73,7 @@ public class FtpConfig extends CachingConfigurerSupport {
         userManagerFactory.setSqlUserAuthenticate(getSqlString("authenticate"));
 
 
-        userManagerFactory.setPasswordEncryptor(new ClearTextPasswordEncryptor());
+        userManagerFactory.setPasswordEncryptor(customMD5PasswordEncoder);
         serverFactory.setUserManager(userManagerFactory.createUserManager());
 
         Map<String, Ftplet> ftpLets = new HashMap<String, Ftplet>();
