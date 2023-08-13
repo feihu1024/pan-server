@@ -1,6 +1,8 @@
 server:
   port: 3000
 spring:
+  main:
+    allow-bean-definition-overriding: true # 解决AuthorizationServerConfig ClientDetailsService自动注入失败的问题
   application:
     name: "pan-server"
   datasource: # 数据库配置

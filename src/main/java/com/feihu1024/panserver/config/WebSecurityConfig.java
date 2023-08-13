@@ -40,6 +40,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 静态资源访问路径
         web.ignoring().antMatchers("/css/**", "/js/**")
                 // knif4j访问路径
-                .antMatchers("/v3/**", "/webjars/**", "/doc.html", "/swagger-resources/**");
+                .antMatchers("/swagger-ui/*","/swagger-resources/**","/v2/api-docs","/v3/api-docs","/webjars/**");
     }
 }

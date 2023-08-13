@@ -16,10 +16,18 @@
       password: "E10ADC3949BA59ABBE56E057F20F883E"
     ```
 - 请求头 token验证
-    - Authorization字段格式为： Bearer + 空格 + access_token
+    - 登陆成功后使用AfterScript自动添加全局header
+    ```js
+      var tokenData = ke?.response?.data
+      if(tokenData && tokenData?.access_token) {
+          ke.global.setHeader("Authorization",tokenData.token_type +" "+ tokenData.access_token)
+          setTimeout(() => {
+              location.href = "/doc.html"
+          },800)
+          console.log(ke,tokenData)
+      }
     ```
-      Authorization: “Bearer 85809d55-17a3-47ae-ad0f-0596c379a13e”
-    ```
+
 - Authorization
     - ftp与http使用同一张用户表，密码通过md5加密后存入数据库
     - ftp密码依然使用明文传输
@@ -28,13 +36,13 @@
 
 ## 问题记录
 - 集成SpringSecurity实现用户权限管理
-    - swagger中显示自定义登录接口，添加login后置脚本
     - Authorization使用数据库存储
     - 统一异常处理，要区分权限异常与其他参数异常
-    - 区分管理员权限
+    - 区分管理员权限、普通用户权限、访客权限
     - 继续OAuth2.0集成工作
 - 继续用户管理接口，用户的增删改查，添加角色字段
 - 开始编写http文件访问接口
+- 如何使用微服务架构拆分权限管理模块和文件服务模块
 - 研究如何实现everything文件搜索
 - 研究如何实现文本编辑功能，如何实现文件预览自动预览功能
 - 如何解决swagger参数动态化配置的问题

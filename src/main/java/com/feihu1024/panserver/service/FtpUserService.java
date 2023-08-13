@@ -35,7 +35,7 @@ public class FtpUserService extends ServiceImpl<FtpUserMapper, FtpUser> implemen
         String uName = user.getUserName();
 
         // 添加权限
-        authorities.add(new SimpleGrantedAuthority(uName == "admin" ? "admin": "normal"));
+        authorities.add(new SimpleGrantedAuthority(uName.equals("admin") ? "admin": "normal"));
 
         return User.withUsername(uName).password(user.getPassword()).authorities(authorities).build();
     }

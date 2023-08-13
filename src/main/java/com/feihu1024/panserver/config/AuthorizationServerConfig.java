@@ -1,25 +1,29 @@
 package com.feihu1024.panserver.config;
 
 import com.feihu1024.panserver.service.FtpUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+
+import javax.sql.DataSource;
+import java.util.Collections;
 
 /**
  * OAuth2.0 授权服务配置
@@ -30,10 +34,12 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    public static final Logger log = LoggerFactory.getLogger(AuthorizationServerConfigurerAdapter.class);
-
     @Autowired
     private TokenStore tokenStore;
+
+    @Qualifier("accessTokenConverter")
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @Autowired
     private ClientDetailsService clientDetailsService;
@@ -51,22 +57,31 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private PasswordEncoder passwordEncoder;
 
     @Bean
-    public AuthorizationCodeServices authorizationCodeServices() {
-        return new InMemoryAuthorizationCodeServices();
+    public AuthorizationServerTokenServices tokenServices() {
+        DefaultTokenServices services = new DefaultTokenServices();
+        services.setClientDetailsService(clientDetailsService);
+        services.setSupportRefreshToken(true);
+        services.setTokenStore(tokenStore);
+        services.setAccessTokenValiditySeconds(7200);
+        services.setRefreshTokenValiditySeconds(259200);
+
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(Collections.singletonList(jwtAccessTokenConverter));
+        services.setTokenEnhancer(tokenEnhancerChain);
+
+        return services;
     }
 
+    @Bean
+    public AuthorizationCodeServices authorizationCodeServices(DataSource dataSource) {
+        return new JdbcAuthorizationCodeServices(dataSource);
+    }
 
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        String secretMD5 = passwordEncoder.encode("secret");
-        clients.inMemory()
-                .withClient("pan-server-web")
-                .secret(secretMD5)
-                .resourceIds("pan-server")
-                .authorizedGrantTypes("authorization_code", "password", "client_credentials", "implicit", "refresh_token")//该client允许的授权类型
-                .scopes("all")
-                .autoApprove(false);
-        log.info("Authorization user is  client_id: pan-server, secret: {}",secretMD5);
+    @Bean
+    public ClientDetailsService clientDetailsService(DataSource dataSource) {
+        JdbcClientDetailsService clientDetailsService = new JdbcClientDetailsService(dataSource);
+        clientDetailsService.setPasswordEncoder(passwordEncoder);
+        return clientDetailsService;
     }
 
     @Override
@@ -77,8 +92,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizationCodeServices(authorizationCodeServices)
                 .tokenServices(tokenServices())
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);
-
-        endpoints.pathMapping("/oauth/confirm_access", "/custom/confirm_access");
     }
 
     @Override
@@ -87,16 +100,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .tokenKeyAccess("permitAll()")  // tokenkey这个endpoint当使用JwtToken且使用非对称加密时，资源服务用于获取公钥而开放的，这里指这个endpoint完全公开
                 .checkTokenAccess("permitAll()") // checkToken这个endpoint完全公开
                 .allowFormAuthenticationForClients(); // 允许表单认证
-    }
-
-    @Bean
-    public AuthorizationServerTokenServices tokenServices() {
-        DefaultTokenServices services = new DefaultTokenServices();
-        services.setClientDetailsService(clientDetailsService);
-        services.setSupportRefreshToken(true);
-        services.setTokenStore(tokenStore);
-        services.setAccessTokenValiditySeconds(7200);
-        services.setRefreshTokenValiditySeconds(259200);
-        return services;
     }
 }
