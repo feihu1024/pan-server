@@ -32,11 +32,9 @@ public class FtpUserService extends ServiceImpl<FtpUserMapper, FtpUser> implemen
             throw new UsernameNotFoundException("用户名不存在");
         }
 
-        String uName = user.getUserName();
-
         // 添加权限
-        authorities.add(new SimpleGrantedAuthority(uName.equals("admin") ? "admin": "normal"));
+        authorities.add(new SimpleGrantedAuthority(user.getRule()));
 
-        return User.withUsername(uName).password(user.getPassword()).authorities(authorities).build();
+        return User.withUsername(user.getUserName()).password(user.getPassword()).authorities(authorities).build();
     }
 }

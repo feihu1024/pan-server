@@ -79,7 +79,7 @@ class OwnSwaggerAddtion implements ApiListingScannerPlugin {
         List<RequestParameter> requestParameters=new ArrayList<>();
         requestParameters.add(new RequestParameterBuilder().name("client_id").description("客户端id").in(ParameterType.QUERY).parameterIndex(0).required(true).build());
         requestParameters.add(new RequestParameterBuilder().name("client_secret").description("客户端密码").in(ParameterType.QUERY).parameterIndex(1).required(true).build());
-        requestParameters.add(new RequestParameterBuilder().name("grant_type").description("登陆类型").in(ParameterType.QUERY).parameterIndex(2).required(true).build());
+        requestParameters.add(new RequestParameterBuilder().name("grant_type").description("登录类型").in(ParameterType.QUERY).parameterIndex(2).required(true).build());
         requestParameters.add(new RequestParameterBuilder().name("username").description("用户名").in(ParameterType.QUERY).parameterIndex(3).required(true).build());
         requestParameters.add(new RequestParameterBuilder().name("password").description("密码").in(ParameterType.QUERY).parameterIndex(4).required(true).build());
 

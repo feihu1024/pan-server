@@ -1,11 +1,11 @@
 package com.feihu1024.panserver.config;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 /**
@@ -31,15 +31,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().formLogin().disable().authorizeRequests().antMatchers("/login", "/refreshToken").permitAll()
-                .anyRequest().authenticated();
-    }
+        http.csrf().disable().formLogin().disable().authorizeRequests()
+                // 放行登录接口、静态资源、knif4j资源
+                // .antMatchers("/login", "/refreshToken","/css/**", "/js/**","/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**")
+                // .permitAll()
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        // 静态资源访问路径
-        web.ignoring().antMatchers("/css/**", "/js/**")
-                // knif4j访问路径
-                .antMatchers("/swagger-ui/*","/swagger-resources/**","/v2/api-docs","/v3/api-docs","/webjars/**");
+                .antMatchers("/pan-server/ftp-user").hasAuthority("admin")
+                .antMatchers("/pan-server/surfStation").hasAnyAuthority("admin", "normal")
+                .antMatchers("/pan-server/**").authenticated()
+                .anyRequest().permitAll();
     }
 }

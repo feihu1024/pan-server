@@ -1,8 +1,10 @@
 package com.feihu1024.panserver.controller;
 
+import com.feihu1024.panserver.common.CustomMD5PasswordEncoder;
 import com.feihu1024.panserver.interrupt.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2RefreshToken;
@@ -27,7 +29,11 @@ public class AuthController {
     @ResponseBody
     @DeleteMapping("/logout")
     public ResponseResult<ResponseResult> logout(HttpServletRequest httpRequest) {
-        String access_token = httpRequest.getHeader("Authorization").split(" ")[1];
+        String authorization = httpRequest.getHeader("Authorization");
+        if (authorization == null) {
+            return new ResponseResult(false, 401, "退出失败: 无效token", false);
+        }
+        String access_token = authorization.split(" ")[1];
         OAuth2AccessToken accessToken = tokenStore.readAccessToken(access_token);
         if(accessToken != null) {
             tokenStore.removeAccessToken(accessToken);
@@ -35,9 +41,9 @@ public class AuthController {
             if(refreshToken != null) {
                 tokenStore.removeRefreshToken(refreshToken);
             }
-            return new ResponseResult<ResponseResult>(new ResponseResult(true,200,"\"退出成功\"",true));
+            return new ResponseResult(true,200,"\"退出成功\"",true);
         }else {
-            return new ResponseResult<ResponseResult>(new ResponseResult(false,401,"退出失败: 无效token",false));
+            return new ResponseResult(false, 401, "退出失败: 无效token", false);
         }
     }
 }

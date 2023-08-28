@@ -1,6 +1,7 @@
 package com.feihu1024.panserver.config;
 
 
+import com.feihu1024.panserver.interrupt.CustomAuthEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,12 +18,15 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @Configuration
 @EnableResourceServer
 
-public class ResouceServerConfig  extends ResourceServerConfigurerAdapter {
+public class ResouceServerConfig extends ResourceServerConfigurerAdapter {
 
-    private static final String RESOURCE_ID= "pan-server";
+    private static final String RESOURCE_ID = "pan-server";
 
     @Autowired
     private TokenStore tokenStore;
+
+    @Autowired
+    private CustomAuthEntryPoint customAuthEntryPoint;
 
 //    @Bean
 //    public ResourceServerTokenServices resourceServerTokenServices(){
@@ -35,14 +39,17 @@ public class ResouceServerConfig  extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId(RESOURCE_ID).tokenStore(tokenStore).stateless(true);
+        resources.resourceId(RESOURCE_ID)
+                .tokenStore(tokenStore)
+                .stateless(true)
+                .authenticationEntryPoint(customAuthEntryPoint);
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/ftp-user/**","/surfStation/**").access("#oauth2.hasScope('all')")
+                .antMatchers("/pan-server/**").access("#oauth2.hasScope('all')")
                 .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);

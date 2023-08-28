@@ -9,18 +9,31 @@ spring:
     dynamic:
       primary: postgres # 设置默认的数据源或者数据源组,默认值即为master
       strict: false # 严格匹配数据源,默认false.true未匹配到指定数据源时抛异常,false使用默认数据源
+#      datasource:
+#        base_gis:
+#          driver-class-name: org.postgresql.Driver
+#          url: jdbc:postgresql://feihu1024.cn:5432/base_gis?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+#          username: postgres
+#          password: 123456pro
+#          type: com.alibaba.druid.pool.DruidDataSource
+#        postgres:
+#          driver-class-name: org.postgresql.Driver
+#          url: jdbc:postgresql://feihu1024.cn:5432/postgres?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+#          username: postgres
+#          password: 123456pro
+#          type: com.alibaba.druid.pool.DruidDataSource
       datasource:
         base_gis:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://feihu1024.cn:5432/base_gis?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+          url: jdbc:postgresql://localhost:5432/postgres?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
           username: postgres
-          password: 123456pro
+          password: 123456
           type: com.alibaba.druid.pool.DruidDataSource
         postgres:
           driver-class-name: org.postgresql.Driver
-          url: jdbc:postgresql://feihu1024.cn:5432/postgres?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+          url: jdbc:postgresql://localhost:5432/postgres?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
           username: postgres
-          password: 123456pro
+          password: 123456
           type: com.alibaba.druid.pool.DruidDataSource
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

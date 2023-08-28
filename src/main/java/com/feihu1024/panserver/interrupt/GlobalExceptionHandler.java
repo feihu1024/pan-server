@@ -37,7 +37,7 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice {
     }
 
     /*
-        捕获全局异常，但需要通过supps进行判断，只对ExceptionHandler增强过的响应进行拦截，否则swagger访问会出现异常
+        捕获全局异常，但需要通过supports进行判断，只对ExceptionHandler增强过的响应进行拦截，否则swagger访问会出现异常
         如果ControllerAdvice注解中指定了controller包名，失败的请求无法在beforeBodyWrite拦截
      */
     @Override

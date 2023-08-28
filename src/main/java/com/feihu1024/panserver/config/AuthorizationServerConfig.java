@@ -1,5 +1,6 @@
 package com.feihu1024.panserver.config;
 
+import com.feihu1024.panserver.oauth2.AuthWebResponseExceptionTranslator;
 import com.feihu1024.panserver.service.FtpUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +17,7 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -56,6 +58,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    @Qualifier("authWebResponseExceptionTranslator")
+    private WebResponseExceptionTranslator webResponseExceptionTranslator;
+
     @Bean
     public AuthorizationServerTokenServices tokenServices() {
         DefaultTokenServices services = new DefaultTokenServices();
@@ -91,7 +97,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .userDetailsService(ftpUserService)
                 .authorizationCodeServices(authorizationCodeServices)
                 .tokenServices(tokenServices())
-                .allowedTokenEndpointRequestMethods(HttpMethod.POST);
+                .allowedTokenEndpointRequestMethods(HttpMethod.POST)
+                .exceptionTranslator(webResponseExceptionTranslator);
+
     }
 
     @Override

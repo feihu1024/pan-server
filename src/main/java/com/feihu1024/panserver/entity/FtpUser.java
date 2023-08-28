@@ -54,4 +54,7 @@ public class FtpUser implements Serializable {
 
     @ApiModelProperty(value = "最大同IP登陆用户数")
     private Integer maxLoginPerip;
+
+    @ApiModelProperty(value = "用户角色")
+    private String rule;
 }

@@ -16,7 +16,7 @@
       password: "E10ADC3949BA59ABBE56E057F20F883E"
     ```
 - 请求头 token验证
-    - 登陆成功后使用AfterScript自动添加全局header
+    - 登录成功后使用AfterScript自动添加全局header
     ```js
       var tokenData = ke?.response?.data
       if(tokenData && tokenData?.access_token) {
@@ -30,18 +30,15 @@
 
 - Authorization
     - ftp与http使用同一张用户表，密码通过md5加密后存入数据库
-    - ftp密码依然使用明文传输
+    - ftp密码依然使用明文登录
     - http密码在前端进行md5加密后使用密文传输，其中client_secret字段也需要加密
     - client_id字段="pan-server-web", secret字段="5EBE2294ECD0E0F08EAB7690D2A6EE69"("secret"加密后的值)
 
 ## 问题记录
-- 集成SpringSecurity实现用户权限管理
-    - Authorization使用数据库存储
-    - 统一异常处理，要区分权限异常与其他参数异常
-    - 区分管理员权限、普通用户权限、访客权限
-    - 继续OAuth2.0集成工作
-- 继续用户管理接口，用户的增删改查，添加角色字段
 - 开始编写http文件访问接口
+- 集成redis缓存
+- 统一jackson与fastjson 实现统一格式化null值被自动过滤的问题
+- controller层添加异常处理，保证sql错误信息不会输出
 - 如何使用微服务架构拆分权限管理模块和文件服务模块
 - 研究如何实现everything文件搜索
 - 研究如何实现文本编辑功能，如何实现文件预览自动预览功能
