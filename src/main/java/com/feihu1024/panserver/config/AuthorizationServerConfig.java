@@ -1,7 +1,8 @@
 package com.feihu1024.panserver.config;
 
-import com.feihu1024.panserver.oauth2.AuthWebResponseExceptionTranslator;
-import com.feihu1024.panserver.service.FtpUserService;
+import com.feihu1024.panserver.oauth2.CustomTokenEnhancer;
+import com.feihu1024.panserver.service.AuthService;
+import com.feihu1024.panserver.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -53,7 +55,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthorizationCodeServices authorizationCodeServices;
 
     @Autowired
-    FtpUserService ftpUserService;
+    AuthService authService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -61,6 +63,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     @Qualifier("authWebResponseExceptionTranslator")
     private WebResponseExceptionTranslator webResponseExceptionTranslator;
+
+    @Autowired
+    private CustomTokenEnhancer customTokenEnhancer;
 
     @Bean
     public AuthorizationServerTokenServices tokenServices() {
@@ -72,7 +77,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         services.setRefreshTokenValiditySeconds(259200);
 
         TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(Collections.singletonList(jwtAccessTokenConverter));
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(customTokenEnhancer,jwtAccessTokenConverter));
         services.setTokenEnhancer(tokenEnhancerChain);
 
         return services;
@@ -94,7 +99,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
                 .authenticationManager(authenticationManager)
-                .userDetailsService(ftpUserService)
+                .userDetailsService(authService)
                 .authorizationCodeServices(authorizationCodeServices)
                 .tokenServices(tokenServices())
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST)

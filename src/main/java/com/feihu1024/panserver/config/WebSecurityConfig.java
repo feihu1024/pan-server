@@ -32,12 +32,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().formLogin().disable().authorizeRequests()
-                // 放行登录接口、静态资源、knif4j资源
-                // .antMatchers("/login", "/refreshToken","/css/**", "/js/**","/swagger-ui/*", "/swagger-resources/**", "/v2/api-docs", "/v3/api-docs", "/webjars/**")
-                // .permitAll()
-
-                .antMatchers("/pan-server/ftp-user").hasAuthority("admin")
-                .antMatchers("/pan-server/surfStation").hasAnyAuthority("admin", "normal")
                 .antMatchers("/pan-server/**").authenticated()
                 .anyRequest().permitAll();
     }

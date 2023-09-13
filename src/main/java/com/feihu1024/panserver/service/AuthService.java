@@ -2,12 +2,12 @@ package com.feihu1024.panserver.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.feihu1024.panserver.entity.AuthUser;
 import com.feihu1024.panserver.mapper.FtpUserMapper;
 import com.feihu1024.panserver.entity.FtpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-public class FtpUserService extends ServiceImpl<FtpUserMapper, FtpUser> implements IService<FtpUser> , UserDetailsService {
+public class AuthService extends ServiceImpl<FtpUserMapper, FtpUser> implements IService<FtpUser> , UserDetailsService {
 
     @Autowired
     FtpUserMapper ftpUserMapper;
@@ -35,6 +35,11 @@ public class FtpUserService extends ServiceImpl<FtpUserMapper, FtpUser> implemen
         // 添加权限
         authorities.add(new SimpleGrantedAuthority(user.getRule()));
 
-        return User.withUsername(user.getUserName()).password(user.getPassword()).authorities(authorities).build();
+        AuthUser authUser = new AuthUser(user.getUserName(),user.getPassword(),authorities);
+        authUser.setId(user.getId());
+        authUser.setHomeDirectory(user.getHomeDirectory());
+        authUser.setRule(user.getRule());
+
+        return authUser;
     }
 }
