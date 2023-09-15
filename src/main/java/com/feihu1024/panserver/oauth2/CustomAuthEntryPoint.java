@@ -1,5 +1,6 @@
-package com.feihu1024.panserver.interrupt;
+package com.feihu1024.panserver.oauth2;
 import com.alibaba.fastjson.JSONObject;
+import com.feihu1024.panserver.interrupt.ResponseResult;
 import com.feihu1024.panserver.oauth2.AuthWebResponseExceptionTranslator;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;

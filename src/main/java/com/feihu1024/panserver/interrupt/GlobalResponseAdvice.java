@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
- * 全局异常拦截器
+ * Controller响应拦截
  */
 
 @ControllerAdvice()
-public class GlobalExceptionHandler implements ResponseBodyAdvice {
+public class GlobalResponseAdvice implements ResponseBodyAdvice {
 
     // 处理自定义异常
     @ExceptionHandler(value = CustomException.class)
