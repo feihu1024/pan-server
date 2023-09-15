@@ -45,14 +45,14 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- 多源数据支持-->
+        <!-- 多源数据支持 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
             <version>3.5.0</version>
         </dependency>
 
-        <!-- jdbc连接-->
+        <!-- jdbc连接 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
@@ -72,13 +72,13 @@
             <version>3.3.2</version>
         </dependency>
 
-        <!-- 简化实体类getter、setter-->
+        <!-- 简化实体类getter、setter -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <!-- log4j2日志-->
+        <!-- log4j2日志 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
@@ -96,27 +96,35 @@
             <version>3.0.2</version>
         </dependency>
 
-        <!-- ftp服务端-->
+        <!-- ftp服务端 -->
         <dependency>
             <groupId>org.apache.ftpserver</groupId>
             <artifactId>ftpserver-core</artifactId>
-            <version>1.1.1</version>
+            <version>1.2.0</version>
         </dependency>
 
-        <!-- SpringSecurity + OAuth2.0权限认证-->
+        <!-- ftp客户端 -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
+
+        <!-- SpringSecurity + OAuth2.0权限认证 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
             <version>2.2.5.RELEASE</version>
         </dependency>
 
+        <!-- OAuth2.0权限认证 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-oauth2</artifactId>
             <version>2.2.5.RELEASE</version>
         </dependency>
 
-        <!-- yam配置文件自定义时的提示辅助工具-->
+        <!-- yam配置文件自定义时的提示辅助工具 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>

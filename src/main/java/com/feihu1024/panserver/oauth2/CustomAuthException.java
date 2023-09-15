@@ -7,15 +7,15 @@ import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
  * 自定义oauth2异常
  */
 
-@JsonSerialize(using = CustomOauthExceptionJackson2Serializer.class)
+@JsonSerialize(using = CustomAuthExceptionJackson2Serializer.class)
 
-public class CustomOAuth2Exception extends OAuth2Exception {
+public class CustomAuthException extends OAuth2Exception {
 
-    public CustomOAuth2Exception(String msg, Throwable t) {
+    public CustomAuthException(String msg, Throwable t) {
         super(msg, t);
     }
 
-    public CustomOAuth2Exception(String msg) {
+    public CustomAuthException(String msg) {
         super(msg);
     }
 }

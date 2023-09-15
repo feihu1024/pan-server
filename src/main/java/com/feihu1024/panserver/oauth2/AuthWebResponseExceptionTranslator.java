@@ -69,7 +69,7 @@ public class AuthWebResponseExceptionTranslator implements WebResponseExceptionT
         }
 
         //自定义异常信息
-        CustomOAuth2Exception exception  = new CustomOAuth2Exception(e.getMessage(),e);
+        CustomAuthException exception  = new CustomAuthException(e.getMessage(),e);
 
         //将自定义的异常信息放入返回体中
         ResponseEntity<OAuth2Exception> response = new ResponseEntity<OAuth2Exception>(exception, headers, HttpStatus.valueOf(status));

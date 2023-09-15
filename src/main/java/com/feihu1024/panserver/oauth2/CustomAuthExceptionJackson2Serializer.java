@@ -10,14 +10,14 @@ import java.io.IOException;
 /**
  * oauth2异常序列化
  */
-public class CustomOauthExceptionJackson2Serializer extends StdSerializer<CustomOAuth2Exception> {
+public class CustomAuthExceptionJackson2Serializer extends StdSerializer<CustomAuthException> {
 
-    public CustomOauthExceptionJackson2Serializer() {
-        super(CustomOAuth2Exception.class);
+    public CustomAuthExceptionJackson2Serializer() {
+        super(CustomAuthException.class);
     }
 
     @Override
-    public void serialize(CustomOAuth2Exception e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(CustomAuthException e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeBooleanField("success",false);
         jsonGenerator.writeNumberField("code", e.getHttpErrorCode());

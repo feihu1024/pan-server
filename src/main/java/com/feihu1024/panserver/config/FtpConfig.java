@@ -50,8 +50,6 @@ public class FtpConfig extends CachingConfigurerSupport {
         factory.setPort(ftpProperties.getPort());
 
         DataConnectionConfigurationFactory dataConnectionConfigurationFactory = new DataConnectionConfigurationFactory();
-        // dataConnectionConfigurationFactory.setIdleTime(60);
-        // dataConnectionConfigurationFactory.setActiveLocalPort(ftpProperties.getPort());
         dataConnectionConfigurationFactory.setPassiveIpCheck(true);
         dataConnectionConfigurationFactory.setPassivePorts(ftpProperties.getPassivePorts());
         dataConnectionConfigurationFactory.setPassiveExternalAddress(ftpProperties.getPassiveExternalAddress());

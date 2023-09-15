@@ -1,6 +1,9 @@
 package com.feihu1024.panserver.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.feihu1024.panserver.common.CustomMD5PasswordEncoder;
+import com.feihu1024.panserver.ftpserver.PanClientFactory;
 import com.feihu1024.panserver.interrupt.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,6 +33,7 @@ public class AuthController {
     @DeleteMapping("/logout")
     public ResponseResult<ResponseResult> logout(HttpServletRequest httpRequest) {
         String authorization = httpRequest.getHeader("Authorization");
+        JSONObject userInfo = JSON.parseObject(httpRequest.getHeader("user_info"));
         if (authorization == null) {
             return new ResponseResult(false, 401, "退出失败: 无效token", false);
         }
@@ -41,6 +45,7 @@ public class AuthController {
             if(refreshToken != null) {
                 tokenStore.removeRefreshToken(refreshToken);
             }
+            PanClientFactory.removePanClient(userInfo.getLong("id"));
             return new ResponseResult(true,200,"\"退出成功\"",true);
         }else {
             return new ResponseResult(false, 401, "退出失败: 无效token", false);

@@ -62,6 +62,12 @@ public class CustomMD5PasswordEncoder implements PasswordEncryptor, PasswordEnco
      */
     @Override
     public boolean matches(String password, String storedPassword) {
-         return md5PasswordEncryptor.matches(password, storedPassword);
+        // 如果是服务端发起的登录，则添加server:前缀，此时明文比较即可
+         if(password.startsWith("server:")){
+             String prefixPassword = password.replace("server:","");
+             return prefixPassword.equals(storedPassword);
+         }else {
+             return md5PasswordEncryptor.matches(password, storedPassword);
+         }
     }
 }
