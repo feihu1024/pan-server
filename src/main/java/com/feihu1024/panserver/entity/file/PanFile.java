@@ -1,4 +1,4 @@
-package com.feihu1024.panserver.entity;
+package com.feihu1024.panserver.entity.file;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,9 +9,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @NoArgsConstructor // 创建无参的构造方法
 @AllArgsConstructor // 创建满参的构造方法

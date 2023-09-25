@@ -1,9 +1,8 @@
 package com.feihu1024.panserver.ftpserver;
 
 import com.feihu1024.panserver.entity.FtpUser;
-import com.feihu1024.panserver.entity.PanFile;
+import com.feihu1024.panserver.entity.file.PanFile;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.ftpserver.FtpServer;
 import org.slf4j.Logger;
@@ -36,5 +35,13 @@ public class PanClient {
 
     public PanFile[] listFiles(String path) throws IOException {
         return  PanFile.convertToPanFileList(ftpClient.listFiles(path));
+    }
+
+    public PanFile makeDirectory(String path) throws IOException {
+        if(ftpClient.makeDirectory(path)){
+            return new PanFile(ftpClient.mdtmFile(path));
+        }else{
+            return null;
+        }
     }
 }

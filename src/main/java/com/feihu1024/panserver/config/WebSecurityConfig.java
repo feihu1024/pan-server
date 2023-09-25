@@ -30,7 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().formLogin().disable().authorizeRequests()
+        http.csrf().disable().formLogin().disable().headers().frameOptions().disable()
+                .and().authorizeRequests()
                 .antMatchers("/pan-server/**").authenticated()
                 .anyRequest().permitAll();
     }

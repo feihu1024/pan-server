@@ -1,8 +1,8 @@
 package com.feihu1024.panserver.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.feihu1024.panserver.entity.PanFile;
+import com.feihu1024.panserver.common.Util;
+import com.feihu1024.panserver.entity.file.PanFile;
+import com.feihu1024.panserver.entity.file.UploadFile;
 import com.feihu1024.panserver.interrupt.ResponseResult;
 import com.feihu1024.panserver.service.FileService;
 import io.swagger.annotations.Api;
@@ -28,19 +28,29 @@ public class FileController {
     @ApiOperation(value = "获取文件、目录列表", notes = "")
     @ResponseBody
     @GetMapping("/list")
-    public ResponseResult<List<PanFile[]>> getAllUsers(@ApiParam(value = "文件路径",defaultValue = "/") String path, HttpServletRequest request) {
-        // 获取用户信息参数
-        JSONObject userInfo = JSON.parseObject(request.getHeader("user_info"));
+    public ResponseResult<List<PanFile[]>> listByPath(@ApiParam(value = "文件路径") String path, HttpServletRequest request) {
+
         ResponseResult result = null;
-
-        // 设置默认path参数
-        if(path ==null) path="/";
-
-        try{
-            PanFile[] files = fileService.getFileListByPath(userInfo.getLong("id"),path);
+        try {
+            PanFile[] files = fileService.listByPath(Util.getUserInfo(request).getLong("id"), path);
             result = new ResponseResult(files);
-        }catch (Exception e) {
-            result = new ResponseResult(false, 500,"获取列表失败，请检查文件路径!",null);
+        } catch (Exception e) {
+            result = new ResponseResult(false, 500, "获取列表失败，请检查文件路径!", null);
+        }
+        return result;
+    }
+
+    @ApiOperation(value = "上传文件到指定目录", notes = "")
+    @ResponseBody
+    @PostMapping("/upload")
+    public ResponseResult uploadByPath(UploadFile file, HttpServletRequest request) {
+
+        ResponseResult result = null;
+        try {
+            fileService.uploadByPath(Util.getUserInfo(request).getLong("id"),file);
+            result = new ResponseResult(file);
+        } catch (Exception e) {
+            result = new ResponseResult(false, 500, "获取列表失败，请检查文件路径!", null);
         }
         return result;
     }
