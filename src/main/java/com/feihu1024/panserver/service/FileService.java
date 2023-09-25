@@ -32,7 +32,7 @@ public class FileService {
 
     public void uploadByPath(Long userId, UploadFile file) throws IOException {
         PanClient client = getClientByUseId(userId);
-        if(file.getPath() !=null) {
+        if (file.getPath() != null) {
             client.makeDirectory(file.getPath());
         }
     }
