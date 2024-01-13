@@ -50,7 +50,7 @@ public class FileController {
             fileService.uploadByPath(Util.getUserInfo(request).getLong("id"),file);
             result = new ResponseResult(file);
         } catch (Exception e) {
-            result = new ResponseResult(false, 500, "获取列表失败，请检查文件路径!", null);
+            result = new ResponseResult(false, 500, "上传文件失败: "+e.getMessage(), null);
         }
         return result;
     }

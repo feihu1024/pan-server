@@ -38,6 +38,7 @@ public class PanFile implements Serializable {
     }
 
     public static PanFile convertToPanFile(FTPFile file) {
+        if(file ==null){return null;}
         return new PanFile(file);
     }
 

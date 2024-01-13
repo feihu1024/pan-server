@@ -6,7 +6,6 @@ import com.feihu1024.panserver.entity.file.PanFile;
 import com.feihu1024.panserver.entity.file.UploadFile;
 import com.feihu1024.panserver.ftpserver.PanClient;
 import com.feihu1024.panserver.ftpserver.PanClientFactory;
-import com.feihu1024.panserver.interrupt.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +29,20 @@ public class FileService {
         return client.listFiles(path);
     }
 
+    /**
+     *
+     * 单文件上传
+     */
     public void uploadByPath(Long userId, UploadFile file) throws IOException {
         PanClient client = getClientByUseId(userId);
-        if (file.getPath() != null) {
-            client.makeDirectory(file.getPath());
+
+        // 检查文件路径是否存在
+        String path = file.getPath();
+        if (client.mlistFile(path)==null) {
+            throw new IOException("目标路径不存在");
         }
+
+
     }
 
     PanClient getClientByUseId(Long userId) throws IOException {

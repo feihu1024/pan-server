@@ -33,10 +33,23 @@ public class PanClient {
         }
     }
 
+    /**
+     * 获取文件列表
+     */
     public PanFile[] listFiles(String path) throws IOException {
         return  PanFile.convertToPanFileList(ftpClient.listFiles(path));
     }
 
+    /**
+     * 检测指定文件或目录是否存在
+     */
+    public PanFile mlistFile(String path) throws IOException{
+        return  PanFile.convertToPanFile(ftpClient.mlistFile(path));
+    }
+
+    /**
+     * 创建目录
+     */
     public PanFile makeDirectory(String path) throws IOException {
         if(ftpClient.makeDirectory(path)){
             return new PanFile(ftpClient.mdtmFile(path));
@@ -44,4 +57,9 @@ public class PanClient {
             return null;
         }
     }
+
+    /**
+     * 上传文件
+     */
+
 }
